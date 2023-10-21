@@ -10,7 +10,7 @@ public interface UserService {
     BaseResponse register (RegistrationRequest registrationRequest);
     BaseResponse login (LoginRequest loginRequest);
     BaseResponse getBalance(String jwt);
-    BaseResponse topupBalance(String jwt, Integer topupAmount);
+    BaseResponse topupBalance(String jwt, String topupAmount);
     BaseResponse doTransaction(String jwt, String serviceCode);
     BaseResponse getTransactionHistory(String jwt, Integer limit, Integer offset);
 }

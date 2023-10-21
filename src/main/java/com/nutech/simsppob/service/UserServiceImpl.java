@@ -10,6 +10,7 @@ import com.nutech.simsppob.repository.UserRepository;
 import com.nutech.simsppob.util.ServiceTypeEnum;
 import com.nutech.simsppob.util.TransactionTypeEnum;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCrypt;
@@ -129,12 +130,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public BaseResponse topupBalance(String jwt, Integer topupAmount) {
+    public BaseResponse topupBalance(String jwt, String topupAmount) {
         BaseResponse baseResponse = null;
 
-        if (topupAmount > 0) {
+        if (NumberUtils.isCreatable(topupAmount) && Integer.valueOf(topupAmount) > 0) {
             if (jwtService.isTokenValid(jwt, getUserByJwt(jwt))) {
-                Integer newBalance = getUserAccountByJwt(jwt).getBalance() + topupAmount;
+                Integer newBalance = getUserAccountByJwt(jwt).getBalance() + Integer.valueOf(topupAmount);
                 getUserAccountByJwt(jwt).setBalance(newBalance);
                 userAccountRepository.save(getUserAccountByJwt(jwt));
                 baseResponse = new BaseResponse(ResponseUtilEnum.SUCCESS.statusCode, "Top Up Balance berhasil", Map.of("balance", newBalance));
@@ -142,7 +143,7 @@ public class UserServiceImpl implements UserService {
                 baseResponse = new BaseResponse(ResponseUtilEnum.INVALID_TOKEN.statusCode, "Token tidak tidak valid atau kadaluwarsa");
             }
         } else {
-            baseResponse = new BaseResponse(ResponseUtilEnum.BAD_REQUEST.statusCode, "Paramter amount hanya boleh angka dan tidak boleh lebih kecil dari 0");
+            baseResponse = new BaseResponse(ResponseUtilEnum.BAD_REQUEST.statusCode, "Parameter top_up_amount hanya boleh angka dan tidak boleh lebih kecil dari 0");
         }
 
         return baseResponse;

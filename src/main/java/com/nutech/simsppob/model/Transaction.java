@@ -23,6 +23,7 @@ public class Transaction {
     private String invoiceNumber;
     private String serviceCode;
     private String serviceName;
+    @Enumerated(EnumType.STRING)
     private TransactionTypeEnum transactionType;
     private Integer totalAmount;
 

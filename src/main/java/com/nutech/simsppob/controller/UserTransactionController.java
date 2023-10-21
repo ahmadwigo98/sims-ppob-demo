@@ -30,8 +30,8 @@ public class UserTransactionController {
 
     @PostMapping("/topup")
     public BaseResponse topupBalance(@RequestHeader(name="Authorization") String authHeader,
-                                     @RequestBody Map<String, Integer> request) {
-        Integer topupAmount = request.get("top_up_amount");
+                                     @RequestBody Map<String, String> request) {
+        String topupAmount = request.get("top_up_amount");
         String jwt = null;
         if (!(authHeader == null) && authHeader.startsWith(("Bearer "))) {
             jwt = authHeader.substring(7);
